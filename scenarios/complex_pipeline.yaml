@@ -1,0 +1,64 @@
+scenarios:
+  - id: multi_table_failure
+    input: "Three pipelines failed overnight: orders_etl, customer_sync, and inventory_update. They share a common upstream source."
+    expected_output: "Root cause: shared upstream source (raw_events) had schema drift. All three pipelines failed on parse step."
+    metadata:
+      expected_route: pipeline_debugger
+      available_agents: "pipeline_debugger, schema_analyzer, query_optimizer"
+    tags: [complex, multi-table]
+
+  - id: schema_evolution
+    input: "We need to add a new column 'loyalty_tier' to the customers table without breaking downstream dashboards"
+    expected_output: "Schema evolution plan: add nullable column, update 3 downstream views, no dashboard breakage expected"
+    metadata:
+      expected_route: schema_analyzer
+      available_agents: "pipeline_debugger, schema_analyzer, query_optimizer"
+    tags: [medium, schema]
+
+  - id: cost_optimization
+    input: "Our Spark job for daily reports is using 200 executor cores and costs $500/day. Can we optimize?"
+    expected_output: "Optimization: partition pruning + broadcast join reduces to 50 cores, estimated $125/day"
+    metadata:
+      expected_route: query_optimizer
+      available_agents: "pipeline_debugger, schema_analyzer, query_optimizer"
+    tags: [medium, cost]
+
+  - id: cross_agent_issue
+    input: "Pipeline failed because the upstream table changed its schema, and the query on top is now also broken"
+    expected_output: "Multi-issue: schema drift caused pipeline failure and query error. Fix schema first, then rerun pipeline."
+    metadata:
+      expected_route: pipeline_debugger
+      available_agents: "pipeline_debugger, schema_analyzer, query_optimizer"
+      requires_multi_agent: true
+    tags: [complex, cross-agent]
+
+  - id: delta_migration
+    input: "After migrating from Hive to Delta, our top 5 queries are 3x slower"
+    expected_output: "Delta migration issues: missing OPTIMIZE, no Z-ORDER on filter columns, statistics not collected"
+    metadata:
+      expected_route: query_optimizer
+      available_agents: "pipeline_debugger, schema_analyzer, query_optimizer"
+    tags: [complex, migration]
+
+  - id: null_values
+    input: "Null values appearing in the revenue column of the daily_metrics table since last Tuesday"
+    expected_output: "Data quality issue: upstream orders table source changed NULL handling"
+    metadata:
+      expected_route: pipeline_debugger
+      available_agents: "pipeline_debugger, schema_analyzer, query_optimizer"
+    tags: [medium, data-quality]
+
+  - id: index_recommendation
+    input: "Users are complaining the product search API backed by our Delta table takes 10+ seconds"
+    expected_output: "Add bloom filter index on product_name and Z-ORDER on category_id for sub-second queries"
+    metadata:
+      expected_route: query_optimizer
+      available_agents: "pipeline_debugger, schema_analyzer, query_optimizer"
+    tags: [medium, performance]
+
+  - id: empty_input
+    input: ""
+    metadata:
+      expected_route: null
+      available_agents: "pipeline_debugger, schema_analyzer, query_optimizer"
+    tags: [edge-case]

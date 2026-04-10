@@ -1,0 +1,39 @@
+scenarios:
+  - id: route_pipeline_failure
+    input: "My ETL pipeline for the orders table failed at 3am with a timeout error"
+    expected_output: "Pipeline failure diagnosed: timeout on orders table ETL due to upstream dependency delay"
+    metadata:
+      expected_route: pipeline_debugger
+      available_agents: "pipeline_debugger, schema_analyzer, query_optimizer"
+    tags: [simple, routing]
+
+  - id: route_schema_mismatch
+    input: "The customer_events table has a column type mismatch after the latest migration"
+    expected_output: "Schema issue identified: column type changed from STRING to INT in customer_events"
+    metadata:
+      expected_route: schema_analyzer
+      available_agents: "pipeline_debugger, schema_analyzer, query_optimizer"
+    tags: [simple, routing]
+
+  - id: route_slow_query
+    input: "Our daily aggregation query on the transactions table went from 2 minutes to 45 minutes"
+    expected_output: "Query performance regression: missing partition pruning on transactions table"
+    metadata:
+      expected_route: query_optimizer
+      available_agents: "pipeline_debugger, schema_analyzer, query_optimizer"
+    tags: [simple, routing]
+
+  - id: route_ambiguous
+    input: "Something is wrong with the orders data"
+    metadata:
+      expected_route: pipeline_debugger
+      available_agents: "pipeline_debugger, schema_analyzer, query_optimizer"
+    tags: [medium, routing, ambiguous]
+
+  - id: route_dependency_cycle
+    input: "Tables A, B, and C all depend on table D which has a circular reference to table A"
+    expected_output: "Circular dependency detected: A -> D -> A. Recommend breaking cycle at D -> A link."
+    metadata:
+      expected_route: pipeline_debugger
+      available_agents: "pipeline_debugger, schema_analyzer, query_optimizer"
+    tags: [complex, routing, dependency]

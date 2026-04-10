@@ -1,0 +1,11 @@
+weights:
+  correctness: 1.5
+  routing_accuracy: 2.0
+  groundedness: 1.0
+  cost_efficiency: 0.5
+
+pass_threshold: 0.7
+
+required_judges:
+  - correctness
+  - routing_accuracy

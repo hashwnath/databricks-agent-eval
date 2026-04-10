@@ -1,0 +1,28 @@
+judges:
+  correctness:
+    model: gpt-4o-mini
+    enabled: true
+
+  routing_accuracy:
+    model: gpt-4o-mini
+    enabled: true
+
+  groundedness:
+    model: gpt-4o-mini
+    enabled: true
+
+  cost_efficiency:
+    enabled: true
+    limits:
+      max_tokens_per_scenario: 10000
+      max_llm_calls: 10
+      max_duration_ms: 30000
+
+  # Databricks-specific judges (scaffolded)
+  guideline_adherence:
+    enabled: false
+    note: "Requires databricks-agents SDK and workspace connection"
+
+  chunk_relevance:
+    enabled: false
+    note: "Requires databricks-agents SDK and workspace connection"
