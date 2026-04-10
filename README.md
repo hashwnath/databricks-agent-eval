@@ -4,6 +4,10 @@
 
 A multi-agent evaluation harness that stress-tests supervisor-agent workflows using LLM judges, scoring rubrics, and regression detection. Compatible with MLflow 3 and Mosaic AI Agent Evaluation.
 
+## Demo
+
+https://github.com/hashwnath/databricks-agent-eval/raw/main/docs/demo.mp4
+
 ## Architecture
 
 ```mermaid
