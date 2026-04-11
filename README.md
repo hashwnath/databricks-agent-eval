@@ -6,7 +6,9 @@ A multi-agent evaluation harness that stress-tests supervisor-agent workflows us
 
 ## Demo
 
-https://github.com/hashwnath/databricks-agent-eval/raw/main/docs/demo.mp4
+![Demo](docs/demo.gif)
+
+[Watch full quality video](https://github.com/hashwnath/databricks-agent-eval/releases/download/v1.0/demo.mp4)
 
 ## Architecture
 
